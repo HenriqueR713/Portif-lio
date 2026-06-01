@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+    <title>Henrique ramos | Portífolio</title>
+</head>
+<body>
+
+    <nav class="navegacao" id="navbar">
+        <div class="logo">
+            <span>Henrique Ramos</span>
+        </div>
+        <ul class="menu" id="menu">
+            <div class="blob" id="blob"></div>
+            <li><a href="#inicio" class="menu-link active" data-section="inicio">Início</a></li>
+            <li><a href="#sobre" class="menu-link" data-section="sobre">Sobre Mim</a></li>
+            <li><a href="#projetos" class="menu-link" data-section="projetos">Portifólio</a></li>
+            <li><a href="#contato" class="menu-link" data-section="contato">Contato</a></li>
+        </ul>
+    </nav>
+
+    <main id="inicio" class="cabecalho">
+        <div class="cabecalho-inner">
+
+            <div class="foto-container hero-anim hero-anim--left" style="transition-delay:0.1s">
+                <div class="foto-wrapper">
+                    <div class="foto-glow"></div>
+                    <img src="imagens/Início/HenriqueRamos2_cut3.JPG"
+                         alt="Foto de Henrique Ramos em trajes formais"
+                         class="foto-perfil">
+                </div>
+                <div class="foto-badge">
+                    <span class="dot-hero"></span>
+                    Disponível
+                </div>
+            </div>
+
+            <div class="cabecalho-texto">
+                <p class="hero-label hero-anim" style="transition-delay:0.2s">Olá, eu sou</p>
+                <h1 class="hero-anim" style="transition-delay:0.3s">Henrique Ramos</h1>
+                <p class="cabecalho-sub-titulo hero-anim" style="transition-delay:0.4s">Desenvolvedor Front-end</p>
+
+                <div class="hero-frase-bloco hero-anim" style="transition-delay:0.5s">
+                    <span class="aspas">"</span>
+                    <p class="hero-frase-texto" id="hero-frase-texto">
+                        "Posso todas as coisas naquele que me fortalece." — Filipenses 4:13
+                    </p>
+                    <span class="aspas aspas--fecha">"</span>
+                </div>
+
+                <p class="cabecalho-frase hero-anim" style="transition-delay:0.55s">
+                    <span class="frase-typed" id="frase-typed"></span><span class="cursor-blink">|</span>
+                </p>
+
+                <div class="hero-btns hero-anim" style="transition-delay:0.65s">
+                    <a href="#projetos" class="btn-hero btn-hero--primary">
+                        <i class="ti ti-layout-grid"></i>
+                        Ver Projetos
+                    </a>
+                    <a href="cv/henrique-ramos-cv.pdf" download class="btn-hero btn-hero--outline">
+                        <i class="ti ti-download"></i>
+                        Baixar CV
+                    </a>
+                </div>
+
+                <div class="hero-stats hero-anim" style="transition-delay:0.75s">
+                    <div class="hero-stat">
+                        <span class="stat-num" data-target="3">0</span>
+                        <span class="stat-label">Projetos</span>
+                    </div>
+                    <div class="hero-stat-divider"></div>
+                    <div class="hero-stat">
+                        <span class="stat-num" data-target="1">0</span>
+                        <span class="stat-label">Certificado</span>
+                    </div>
+                    <div class="hero-stat-divider"></div>
+                    <div class="hero-stat">
+                        <span class="stat-num" data-target="5">0</span>
+                        <span class="stat-label">Tecnologias</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <section id="sobre" class="sobre">
+        <p class="sobre-label reveal" id="frase-h">Sobre Mim</p>
+        <h2 class="sobre-titulo reveal reveal--delay-1">Quem sou eu</h2>
+
+        <div class="sobre-grid">
+            <div class="sobre-esquerda reveal reveal--left reveal--delay-2">
+                <div class="status-badge">
+                    <span class="dot-status"></span>
+                    Aberto a oportunidades
+                </div>
+
+                <div class="info-pills">
+                    <div class="pill">
+                        <i class="ti ti-map-pin pill-icon"></i>
+                        Recife, PE
+                    </div>
+                    <div class="pill">
+                        <i class="ti ti-school pill-icon"></i>
+                        ADS — 1º Período
+                    </div>
+                    <div class="pill">
+                        <i class="ti ti-briefcase pill-icon"></i>
+                        Dev Front-end
+                    </div>
+                </div>
+            </div>
+
+            <div class="sobre-direita reveal reveal--right reveal--delay-2">
+                <div class="sobre-card">
+                    <p class="sobre-paragrafo">
+                        Olá! Sou estudante de <span class="destaque">Análise e Desenvolvimento de Sistemas</span>, cursando o primeiro período, atualmente um <span class="destaque">desenvolvedor front-end</span> buscando diversas experiências diferentes para expandir meus limites, estou em constante aprendizado e espero poder cooperar com você!
+                    </p>
+                </div>
+
+                <div class="skills-wrap">
+                    <p class="skills-label">O que estou aprendendo</p>
+                    <div class="skills-row">
+                        <span class="skill-tag">HTML</span>
+                        <span class="skill-tag">CSS</span>
+                        <span class="skill-tag">JavaScript</span>
+                        <span class="skill-tag">UI/UX</span>
+                        <span class="skill-tag">Git</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projetos" class="projetos">
+        <h2 class="projetos-titulo reveal">Portfólio</h2>
+
+        <div class="pill-nav reveal reveal--delay-1">
+            <div class="pill-nav-inner" id="pillNav">
+                <div class="pill-indicator" id="pillIndicator"></div>
+                <button class="pill-btn active" data-tab="projetos">Projetos</button>
+                <button class="pill-btn" data-tab="certificados">Certificados</button>
+                <button class="pill-btn" data-tab="habilidades">Habilidades</button>
+            </div>
+        </div>
+
+        <div class="tab-panel active" id="tab-projetos">
+            <div class="cards-grid">
+
+                <div class="card reveal reveal--scale reveal--delay-2">
+                    <img class="card-img"
+                         src="imagens/Projetos/KuroNeko_01.JPG"
+                         alt="Imagem do website da loja Kuro Neko Coffee Co.">
+                    <div class="card-footer">
+                        <span class="card-name">Web site Kuro Neko Coffee</span>
+                        <div class="card-tags">
+                            <span class="tag">HTML</span>
+                            <span class="tag">CSS</span>
+                            <span class="tag">JS</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card reveal reveal--scale reveal--delay-2">
+                    <img class="card-img"
+                         src="imagens/Projetos/DevLINK_01.JPG"
+                         alt="Imagem de um web site com botões e uma foto circular centralizada ao topo do site.">
+                    <div class="card-footer">
+                        <span class="card-name">Dev Link - Rockseat</span>
+                        <div class="card-tags">
+                            <span class="tag">HTML</span>
+                            <span class="tag">CSS</span>
+                            <span class="tag">JS</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card reveal reveal--scale reveal--delay-2">
+                    <img class="card-img"
+                         src="imagens/Projetos/Portifolio_01.JPG"
+                         alt="Kuro Neko Coffee">
+                    <div class="card-footer">
+                        <span class="card-name">Portifólio</span>
+                        <div class="card-tags">
+                            <span class="tag">HTML</span>
+                            <span class="tag">CSS</span>
+                            <span class="tag">JS</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- CERTIFICADOS -->
+        <div class="tab-panel" id="tab-certificados">
+            <div class="cards-grid">
+
+                <div class="card reveal reveal--scale reveal--delay-2" onclick="openCert({name:'HTML e CSS', img:'imagens/certificados/html-css.jpg'})">
+                    <img class="card-img" src="imagens/certificados/html-css.jpg" alt="Certificado HTML e CSS">
+                    <div class="card-footer">
+                        <span class="card-name">HTML e CSS</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- HABILIDADES -->
+        <div class="tab-panel" id="tab-habilidades">
+            <div class="skills-grid">
+
+                <div class="skill-card reveal reveal--scale reveal--delay-2"><i class="ti ti-brand-html5"></i><span>HTML5</span></div>
+                <div class="skill-card reveal reveal--scale reveal--delay-3"><i class="ti ti-brand-css3"></i><span>CSS3</span></div>
+                <div class="skill-card reveal reveal--scale reveal--delay-4"><i class="ti ti-brand-javascript"></i><span>JavaScript</span></div>
+                <div class="skill-card reveal reveal--scale reveal--delay-5"><i class="ti ti-brand-git"></i><span>Git</span></div>
+
+            </div>
+        </div>
+
+    </section>
+
+    <!-- LIGHTBOX -->
+    <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+        <div class="lightbox-box">
+            <button class="lightbox-close" onclick="closeLightbox(null, true)">&times;</button>
+            <img class="lightbox-img" id="lb-img" alt="">
+            <div class="lightbox-footer">
+                <span class="lb-name" id="lb-name"></span>
+                <div class="lb-links" id="lb-links"></div>
+            </div>
+        </div>
+    </div>
+
+    <section id="contato" class="contato">
+
+        <p class="contato-label reveal">Contato</p>
+        <h2 class="contatos-titulo reveal reveal--delay-1">Vamos conversar</h2>
+        <p class="contato-sub reveal reveal--delay-2">Escolha como prefere entrar em contato e escreva sua mensagem abaixo.</p>
+
+        <div class="contato-grid reveal reveal--delay-2">
+
+            <!-- WHATSAPP -->
+            <div class="contato-card" id="card-whatsapp">
+                <div class="contato-card-header">
+                    <div class="contato-icone contato-icone--whatsapp">
+                        <i class="ti ti-brand-whatsapp"></i>
+                    </div>
+                    <div>
+                        <p class="contato-card-titulo">WhatsApp</p>
+                        <p class="contato-card-desc">Resposta rápida</p>
+                    </div>
+                </div>
+
+                <div class="contato-campos">
+                    <input
+                        type="text"
+                        id="wpp-nome"
+                        placeholder="Seu nome"
+                        class="campo-form"
+                        autocomplete="off"
+                    />
+                    <textarea
+                        id="wpp-mensagem"
+                        placeholder="Digite sua mensagem..."
+                        class="text-form"
+                    ></textarea>
+                </div>
+
+                <button class="contato-btn contato-btn--whatsapp" id="btn-whatsapp">
+                    <i class="ti ti-brand-whatsapp"></i>
+                    Enviar pelo WhatsApp
+                </button>
+            </div>
+
+            <!-- DIVISOR -->
+            <div class="contato-divisor">
+                <span>ou</span>
+            </div>
+
+            <!-- EMAIL -->
+            <div class="contato-card" id="card-email">
+                <div class="contato-card-header">
+                    <div class="contato-icone contato-icone--email">
+                        <i class="ti ti-mail"></i>
+                    </div>
+                    <div>
+                        <p class="contato-card-titulo">E-mail</p>
+                        <p class="contato-card-desc">Para algo mais formal</p>
+                    </div>
+                </div>
+
+                <div class="contato-campos">
+                    <input
+                        type="text"
+                        id="email-nome"
+                        placeholder="Seu nome"
+                        class="campo-form"
+                        autocomplete="off"
+                    />
+                    <input
+                        type="email"
+                        id="email-remetente"
+                        placeholder="Seu e-mail (opcional)"
+                        class="campo-form"
+                        autocomplete="off"
+                    />
+                    <textarea
+                        id="email-mensagem"
+                        placeholder="Digite sua mensagem..."
+                        class="text-form"
+                    ></textarea>
+                </div>
+
+                <button class="contato-btn contato-btn--email" id="btn-email">
+                    <i class="ti ti-send"></i>
+                    Enviar por E-mail
+                </button>
+            </div>
+
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+</html>
