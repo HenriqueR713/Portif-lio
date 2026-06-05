@@ -4,14 +4,11 @@
     font-weight: 800;
 }
 
-h1 { font-family: 'syne local', sans-serif; }
-h2 { font-family: 'syne local', sans-serif; }
-
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Epilogue', sans-serif;
 }
 
 html { scroll-behavior: smooth; }
@@ -678,67 +675,51 @@ h1 span {
 .pill-btn.active { color: #fff; }
 .pill-btn:hover:not(.active) { color: rgba(226, 232, 240, 0.85); }
 
-.tab-panel { display: none; }
+.tab-panel { display: none; width: 100%; }
 .tab-panel.active { display: block; }
+
+/* ─── CARDS GRID ─── */
 
 .cards-grid {
     display: flex;
     flex-wrap: wrap;
     gap: 1.25rem;
     justify-content: center;
+    width: 100%;
 }
 
-/* ─── CARD — ANIMAÇÕES SUAVIZADAS ─── */
+/* ─── CARD ─── */
 
 .card {
     width: 280px;
     background: rgba(255, 255, 255, 0.04);
     border: 1px solid rgba(255, 255, 255, 0.09);
     border-radius: 16px;
-    overflow: hidden;
+    /* overflow: hidden removido daqui — ele impedia o translateY de aparecer */
     cursor: pointer;
-    position: relative;
-    will-change: transform, box-shadow;
-
-    transition:
-        transform 0.6s cubic-bezier(.22, 1, .36, 1),
-        box-shadow 0.6s cubic-bezier(.22, 1, .36, 1),
-        border-color 0.5s ease;
+    transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
 }
 
-.card:hover {
-    transform: translateY(-8px) scale(1.025);
-    border-color: rgba(79, 70, 229, 0.65);
-    box-shadow:
-        0 20px 44px rgba(79, 70, 229, 0.2),
-        0 0 24px rgba(124, 58, 237, 0.14);
+.card:hover,
+.card-entry.entrada-feita:hover {
+    transform: translateY(-4px) !important;
+    border-color: rgba(79, 70, 229, 0.65) !important;
+    box-shadow: 0 8px 24px rgba(79, 70, 229, 0.18) !important;
+}
+
+.card:active,
+.card-entry.entrada-feita:active {
+    transform: translateY(-2px) !important;
 }
 
 .card:active {
-    transform: translateY(-3px) scale(0.99);
-    transition:
-        transform 0.18s cubic-bezier(.4, 0, .2, 1),
-        box-shadow 0.18s cubic-bezier(.4, 0, .2, 1);
+    transform: translateY(-2px);
 }
 
-.card::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-        120deg,
-        transparent 20%,
-        rgba(255, 255, 255, 0.09) 50%,
-        transparent 80%
-    );
-    transform: translateX(-150%);
-    transition: transform 0.9s ease;
-    pointer-events: none;
-    z-index: 1;
-}
-
-.card:hover::before {
-    transform: translateX(150%);
+/* Wrapper da imagem segura o overflow p/ manter as bordas arredondadas na foto */
+.card-img-wrapper {
+    overflow: hidden;
+    border-radius: 16px 16px 0 0;
 }
 
 .card-img {
@@ -746,11 +727,11 @@ h1 span {
     height: 180px;
     object-fit: cover;
     display: block;
-    transition: transform 0.6s cubic-bezier(.22, 1, .36, 1);
+    transition: transform 0.4s ease;
 }
 
 .card:hover .card-img {
-    transform: scale(1.04);
+    transform: scale(1.03);
 }
 
 .card-footer {
@@ -758,8 +739,6 @@ h1 span {
     align-items: center;
     justify-content: space-between;
     padding: 0.8rem 1rem;
-    position: relative;
-    z-index: 2;
 }
 
 .card-name { font-size: 0.88rem; font-weight: 600; color: var(--claro); }
@@ -774,7 +753,7 @@ h1 span {
     color: #818cf8;
 }
 
-/* ─── SKILL CARD — ANIMAÇÕES SUAVIZADAS ─── */
+/* ─── SKILL CARD ─── */
 
 .skills-grid {
     display: flex;
@@ -795,32 +774,26 @@ h1 span {
     justify-content: center;
     gap: 0.6rem;
     cursor: default;
-    will-change: transform;
-
-    transition:
-        transform 0.5s cubic-bezier(.22, 1, .36, 1),
-        border-color 0.5s ease,
-        background 0.5s ease,
-        box-shadow 0.5s cubic-bezier(.22, 1, .36, 1);
+    
+    transition: transform 0.22s ease, border-color 0.22s ease, background 0.22s ease, box-shadow 0.22s ease;
 }
 
-.skill-card:hover {
-    transform: translateY(-6px) scale(1.04);
-    border-color: rgba(79, 70, 229, 0.55);
-    background: rgba(79, 70, 229, 0.07);
-    box-shadow: 0 12px 28px rgba(79, 70, 229, 0.15);
+.skill-card:hover,
+.skill-card.entrada-feita:hover {
+    transform: translateY(-4px) !important;
+    border-color: rgba(79, 70, 229, 0.55) !important;
+    background: rgba(79, 70, 229, 0.07) !important;
+    box-shadow: 0 8px 24px rgba(79, 70, 229, 0.15) !important;
 }
 
 .skill-card:active {
-    transform: translateY(-2px) scale(0.98);
-    transition:
-        transform 0.15s cubic-bezier(.4, 0, .2, 1);
+    transform: translateY(-2px);
 }
 
 .skill-card i {
     font-size: 2.6rem;
     color: var(--primaria);
-    transition: transform 0.5s cubic-bezier(.22, 1, .36, 1), color 0.4s ease;
+    transition: transform 0.3s ease, color 0.3s ease;
 }
 
 .skill-card:hover i {
@@ -831,7 +804,7 @@ h1 span {
 .skill-card span {
     font-size: 0.72rem;
     color: #94a3b8;
-    transition: color 0.4s ease;
+    transition: color 0.3s ease;
 }
 
 .skill-card:hover span {
@@ -1152,25 +1125,6 @@ h1 span {
     }
 }
 
-/* ─── ANIMAÇÃO DE ENTRADA DOS ITENS DO PORTFÓLIO ─── */
-
-@keyframes fadeSlideUp {
-    from {
-        opacity: 0;
-        transform: translateY(26px) scale(0.97);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-}
-
-/* Classe aplicada via JS apenas durante a entrada — removida ao fim da animação */
-.card.entrada-ativa,
-.skill-card.entrada-ativa {
-    animation: fadeSlideUp 0.55s cubic-bezier(.22, 1, .36, 1) both;
-}
-
 /* ─── RESPONSIVO GERAL ─── */
 
 @media (max-width: 700px) {
@@ -1201,7 +1155,6 @@ h1 span {
 
 .reveal {
     opacity: 0;
-    transform: translateY(32px);
     transition: opacity 0.35s cubic-bezier(.4,0,.2,1), transform 0.35s cubic-bezier(.4,0,.2,1);
 }
 
@@ -1219,6 +1172,26 @@ h1 span {
 .reveal--delay-3 { transition-delay: 0.15s; }
 .reveal--delay-4 { transition-delay: 0.20s; }
 .reveal--delay-5 { transition-delay: 0.25s; }
+
+/* ─── ENTRADA DOS CARDS SEM CONFLITO COM HOVER ─── */
+/* Classe usada em .card e .skill-card em vez de .reveal */
+
+.card-entry {
+    opacity: 0;
+    transition: opacity 0.4s cubic-bezier(.4,0,.2,1),
+                transform 0.4s cubic-bezier(.4,0,.2,1);
+    transform: translateY(20px);
+}
+
+.card-entry.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.card-entry.entrada-feita {
+    opacity: 1;
+    transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
 
 /* ─── HERO LOAD ANIMATION ─── */
 
@@ -1239,4 +1212,19 @@ h1 span {
 
 #inicio .hero-anim.no-transition {
     transition: none;
+}
+
+/* ─── CAMPO ERRO (SHAKE) ─── */
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%       { transform: translateX(-6px); }
+    40%       { transform: translateX(6px); }
+    60%       { transform: translateX(-4px); }
+    80%       { transform: translateX(4px); }
+}
+
+.campo-erro {
+    border-color: #ef4444 !important;
+    animation: shake 0.4s ease;
 }

@@ -92,10 +92,7 @@
 
     window.addEventListener('load', () => {
         init();
-        setTimeout(() => {
-            init();
-            triggerGridAnimation('projetos');
-        }, 200);
+        setTimeout(init, 200);
     });
 })();
 
@@ -125,13 +122,13 @@
             const panel = document.getElementById('tab-' + btn.dataset.tab);
             panel.classList.add('active');
 
-            triggerGridAnimation(btn.dataset.tab);
-
+            /* Garante que os itens do painel recém-aberto fiquem visíveis */
             requestAnimationFrame(() => {
                 panel.querySelectorAll('.reveal').forEach(el => {
-                    el.classList.remove('visible');
-                    void el.offsetWidth;
-                    revealObserver.observe(el);
+                    el.classList.add('visible');
+                });
+                panel.querySelectorAll('.card-entry').forEach(el => {
+                    ativarCardEntry(el);
                 });
             });
         });
@@ -151,37 +148,6 @@
         if (a) moveIndicator(a);
     });
 })();
-
-/* ─── ANIMAÇÃO DE ENTRADA DOS ITENS — MAIS SUAVE ─── */
-
-function triggerGridAnimation(tabId) {
-    const gridMap = {
-        projetos: 'tab-projetos',
-        certificados: 'tab-certificados',
-        habilidades: 'tab-habilidades'
-    };
-
-    const panel = document.getElementById(gridMap[tabId]);
-    if (!panel) return;
-
-    const items = panel.querySelectorAll('.card, .skill-card');
-
-    items.forEach((item, index) => {
-        // Remove animação anterior e reseta
-        item.classList.remove('entrada-ativa');
-        item.style.animationDelay = '';
-        void item.offsetWidth; // force reflow
-
-        item.style.animationDelay = `${index * 0.09}s`;
-        item.classList.add('entrada-ativa');
-
-        // Remove a classe após a animação terminar para não bloquear o hover
-        item.addEventListener('animationend', () => {
-            item.classList.remove('entrada-ativa');
-            item.style.animationDelay = '';
-        }, { once: true });
-    });
-}
 
 /* ─── LIGHTBOX ─── */
 
@@ -372,6 +338,45 @@ window.addEventListener('load', () => {
         });
     }
 });
+
+/* ─── CARD ENTRY — sem conflito com hover transform ─── */
+/* Após a animação de entrada terminar, troca o transition para o hover funcionar */
+
+function ativarCardEntry(el) {
+    if (el.classList.contains('entrada-feita')) return;
+    el.classList.add('visible');
+    el.addEventListener('transitionend', function handler(e) {
+        if (e.propertyName === 'opacity' || e.propertyName === 'transform') {
+            el.classList.add('entrada-feita');
+            el.removeEventListener('transitionend', handler);
+        }
+    });
+}
+
+const cardEntryObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            ativarCardEntry(entry.target);
+            cardEntryObserver.unobserve(entry.target);
+        }
+    });
+}, { threshold: 0.05 });
+
+document.querySelectorAll('.card-entry').forEach(el => {
+    if (!el.closest('.tab-panel')) {
+        cardEntryObserver.observe(el);
+    }
+});
+
+window.addEventListener('load', () => {
+    const activePanel = document.querySelector('.tab-panel.active');
+    if (activePanel) {
+        activePanel.querySelectorAll('.card-entry').forEach(el => {
+            cardEntryObserver.observe(el);
+        });
+    }
+});
+
 
 /* ─── CONTATO — UTILITÁRIO SHAKE ─── */
 

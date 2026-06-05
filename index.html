@@ -6,6 +6,11 @@
     <link rel="stylesheet" href="style.css">
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@100..900&display=swap" rel="stylesheet">
+
     <title>Henrique ramos | Portífolio</title>
 </head>
 <body>
@@ -47,7 +52,7 @@
                 <div class="hero-frase-bloco hero-anim" style="transition-delay:0.5s">
                     <span class="aspas">"</span>
                     <p class="hero-frase-texto" id="hero-frase-texto">
-                        "Posso todas as coisas naquele que me fortalece." — Filipenses 4:13
+                        "Posso todas as coisas naquele que me fortalece." <br>— Filipenses 4:13
                     </p>
                     <span class="aspas aspas--fecha">"</span>
                 </div>
@@ -67,21 +72,7 @@
                     </a>
                 </div>
 
-                <div class="hero-stats hero-anim" style="transition-delay:0.75s">
-                    <div class="hero-stat">
-                        <span class="stat-num" data-target="3">0</span>
-                        <span class="stat-label">Projetos</span>
-                    </div>
-                    <div class="hero-stat-divider"></div>
-                    <div class="hero-stat">
-                        <span class="stat-num" data-target="1">0</span>
-                        <span class="stat-label">Certificado</span>
-                    </div>
-                    <div class="hero-stat-divider"></div>
-                    <div class="hero-stat">
-                        <span class="stat-num" data-target="5">0</span>
-                        <span class="stat-label">Tecnologias</span>
-                    </div>
+               
                 </div>
             </div>
 
@@ -136,6 +127,7 @@
         </div>
     </section>
 
+    <!-- ─── PORTFÓLIO ─── -->
     <section id="projetos" class="projetos">
         <h2 class="projetos-titulo reveal">Portfólio</h2>
 
@@ -148,13 +140,16 @@
             </div>
         </div>
 
+        <!-- PROJETOS -->
         <div class="tab-panel active" id="tab-projetos">
             <div class="cards-grid">
 
-                <div class="card reveal reveal--scale reveal--delay-2">
-                    <img class="card-img"
-                         src="imagens/Projetos/KuroNeko_01.JPG"
-                         alt="Imagem do website da loja Kuro Neko Coffee Co.">
+                <div class="card card-entry" onclick="openProject({name:'Web site Kuro Neko Coffee', img:'imagens/Projetos/KuroNeko_01.JPG'})">
+                    <div class="card-img-wrapper">
+                        <img class="card-img"
+                             src="imagens/Projetos/KuroNeko_01.JPG"
+                             alt="Imagem do website da loja Kuro Neko Coffee Co.">
+                    </div>
                     <div class="card-footer">
                         <span class="card-name">Web site Kuro Neko Coffee</span>
                         <div class="card-tags">
@@ -165,10 +160,12 @@
                     </div>
                 </div>
 
-                <div class="card reveal reveal--scale reveal--delay-2">
-                    <img class="card-img"
-                         src="imagens/Projetos/DevLINK_01.JPG"
-                         alt="Imagem de um web site com botões e uma foto circular centralizada ao topo do site.">
+                <div class="card card-entry" onclick="openProject({name:'Dev Link - Rockseat', img:'imagens/Projetos/DevLINK_01.JPG'})">
+                    <div class="card-img-wrapper">
+                        <img class="card-img"
+                             src="imagens/Projetos/DevLINK_01.JPG"
+                             alt="Imagem de um web site com botões e uma foto circular centralizada ao topo do site.">
+                    </div>
                     <div class="card-footer">
                         <span class="card-name">Dev Link - Rockseat</span>
                         <div class="card-tags">
@@ -179,10 +176,12 @@
                     </div>
                 </div>
 
-                <div class="card reveal reveal--scale reveal--delay-2">
-                    <img class="card-img"
-                         src="imagens/Projetos/Portifolio_01.JPG"
-                         alt="Kuro Neko Coffee">
+                <div class="card card-entry" onclick="openProject({name:'Portifólio', img:'imagens/Projetos/Portifolio_01.JPG'})">
+                    <div class="card-img-wrapper">
+                        <img class="card-img"
+                             src="imagens/Projetos/Portifolio_01.JPG"
+                             alt="Portifólio">
+                    </div>
                     <div class="card-footer">
                         <span class="card-name">Portifólio</span>
                         <div class="card-tags">
@@ -200,8 +199,10 @@
         <div class="tab-panel" id="tab-certificados">
             <div class="cards-grid">
 
-                <div class="card reveal reveal--scale reveal--delay-2" onclick="openCert({name:'HTML e CSS', img:'imagens/certificados/html-css.jpg'})">
-                    <img class="card-img" src="imagens/certificados/html-css.jpg" alt="Certificado HTML e CSS">
+                <div class="card card-entry" onclick="openCert({name:'HTML e CSS', img:'imagens/certificados/html-css.jpg'})">
+                    <div class="card-img-wrapper">
+                        <img class="card-img" src="imagens/certificados/html-css.jpg" alt="Certificado HTML e CSS">
+                    </div>
                     <div class="card-footer">
                         <span class="card-name">HTML e CSS</span>
                     </div>
@@ -214,10 +215,10 @@
         <div class="tab-panel" id="tab-habilidades">
             <div class="skills-grid">
 
-                <div class="skill-card reveal reveal--scale reveal--delay-2"><i class="ti ti-brand-html5"></i><span>HTML5</span></div>
-                <div class="skill-card reveal reveal--scale reveal--delay-3"><i class="ti ti-brand-css3"></i><span>CSS3</span></div>
-                <div class="skill-card reveal reveal--scale reveal--delay-4"><i class="ti ti-brand-javascript"></i><span>JavaScript</span></div>
-                <div class="skill-card reveal reveal--scale reveal--delay-5"><i class="ti ti-brand-git"></i><span>Git</span></div>
+                <div class="skill-card card-entry"><i class="ti ti-brand-html5"></i><span>HTML5</span></div>
+                <div class="skill-card card-entry"><i class="ti ti-brand-css3"></i><span>CSS3</span></div>
+                <div class="skill-card card-entry"><i class="ti ti-brand-javascript"></i><span>JavaScript</span></div>
+                <div class="skill-card card-entry"><i class="ti ti-brand-git"></i><span>Git</span></div>
 
             </div>
         </div>
