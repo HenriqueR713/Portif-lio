@@ -1,19 +1,15 @@
-/* ─── NAVBAR BLOB ─── */
+/* ─── NAVBAR BLOB ───
+   Mesmo padrão do pillIndicator do portfólio: o blob muda ao clicar em um
+   link e acompanha a seção ativa durante o scroll — não segue o mouse. */
 
 (function () {
     const PAD_X = 20;
-    const BLOB_H = 35;
 
     const blob   = document.getElementById('blob');
     const menu   = document.getElementById('menu');
-    const navbar = document.getElementById('navbar');
     const links  = Array.from(document.querySelectorAll('.menu-link'));
 
     let activeSection = 'inicio';
-    let isInside = false;
-    let blobX = 0, blobW = 0, targetX = 0, targetW = 0;
-
-    blob.style.height = BLOB_H + 'px';
 
     function menuLeft() { return menu.getBoundingClientRect().left; }
 
@@ -22,17 +18,16 @@
         const ml = menuLeft();
         return {
             left:  r.left - ml - PAD_X,
-            width: r.width + PAD_X * 2,
-            cx:    r.left - ml + r.width / 2
+            width: r.width + PAD_X * 2
         };
     }
 
     function getActive() { return links.find(l => l.dataset.section === activeSection) || links[0]; }
 
-    function aimAt(el) {
+    function moveBlobTo(el) {
         const r = rectOf(el);
-        targetX = r.left;
-        targetW = r.width;
+        blob.style.transform = `translateY(-50%) translateX(${r.left}px)`;
+        blob.style.width = r.width + 'px';
     }
 
     function highlight(el) {
@@ -40,63 +35,70 @@
         el.classList.add('active');
     }
 
-    function nearest(mouseX) {
-        const mx = mouseX - menuLeft();
-        return links.reduce((best, l) => {
-            const d = Math.abs(mx - rectOf(l).cx);
-            return d < Math.abs(mx - rectOf(best).cx) ? l : best;
-        }, links[0]);
-    }
-
-    (function tick() {
-        blobX += (targetX - blobX) * 0.16;
-        blobW += (targetW - blobW) * 0.16;
-        blob.style.left  = blobX + 'px';
-        blob.style.width = blobW + 'px';
-        requestAnimationFrame(tick);
-    })();
-
-    navbar.addEventListener('mousemove', e => {
-        const n = nearest(e.clientX);
-        aimAt(n);
-        highlight(n);
+    links.forEach(link => {
+        link.addEventListener('click', () => {
+            activeSection = link.dataset.section;
+            highlight(link);
+            moveBlobTo(link);
+        });
     });
 
-    navbar.addEventListener('mouseenter', () => { isInside = true; });
+    const sections = links
+        .map(l => document.getElementById(l.dataset.section))
+        .filter(Boolean);
 
-    navbar.addEventListener('mouseleave', () => {
-        isInside = false;
-        const a = getActive();
-        highlight(a);
-        aimAt(a);
-    });
+    function updateActiveByScroll() {
+        const viewportCenter = window.innerHeight * 0.4;
+        let current = sections[0];
 
-    const sections = document.querySelectorAll('main[id], section[id]');
-    const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                activeSection = entry.target.id;
-                if (!isInside) { highlight(getActive()); aimAt(getActive()); }
+        sections.forEach(sec => {
+            const rect = sec.getBoundingClientRect();
+            if (rect.top <= viewportCenter && rect.bottom > 0) {
+                current = sec;
             }
         });
-    }, { threshold: 0.4 });
-    sections.forEach(s => observer.observe(s));
+
+        if (current && current.id !== activeSection) {
+            activeSection = current.id;
+            highlight(getActive());
+            moveBlobTo(getActive());
+        }
+    }
+
+    let scrollTicking = false;
+    window.addEventListener('scroll', () => {
+        if (scrollTicking) return;
+        scrollTicking = true;
+        requestAnimationFrame(() => {
+            updateActiveByScroll();
+            scrollTicking = false;
+        });
+    }, { passive: true });
 
     function init() {
-        const r = rectOf(getActive());
-        blobX = r.left; blobW = r.width;
-        targetX = r.left; targetW = r.width;
-        blob.style.left  = blobX + 'px';
-        blob.style.width = blobW + 'px';
+        blob.style.transition = 'none';
+        moveBlobTo(getActive());
+        // força reflow antes de restaurar a transição
+        void blob.offsetWidth;
+        blob.style.transition = '';
     }
 
     window.addEventListener('load', () => {
         init();
-        setTimeout(init, 200);
+        updateActiveByScroll();
+        // recalcula após fontes/ícones do CDN carregarem e mudarem larguras
+        setTimeout(init, 300);
+        setTimeout(init, 1000);
+    });
+
+    window.addEventListener('resize', () => {
+        moveBlobTo(getActive());
     });
 })();
 
-/* ─── PORTFÓLIO — PILL NAV ─── */
+/* ─── PORTFÓLIO — PILL NAV ───
+   Trocado left/width por transform translateX + width, mantendo a
+   transição suave já definida em CSS. */
 
 (function () {
     const pillNav   = document.getElementById('pillNav');
@@ -106,7 +108,7 @@
     function moveIndicator(btn) {
         const nr = pillNav.getBoundingClientRect();
         const br = btn.getBoundingClientRect();
-        indicator.style.left  = (br.left - nr.left) + 'px';
+        indicator.style.transform = `translateX(${br.left - nr.left}px)`;
         indicator.style.width = br.width + 'px';
     }
 
@@ -122,7 +124,6 @@
             const panel = document.getElementById('tab-' + btn.dataset.tab);
             panel.classList.add('active');
 
-            /* Garante que os itens do painel recém-aberto fiquem visíveis */
             requestAnimationFrame(() => {
                 panel.querySelectorAll('.reveal').forEach(el => {
                     el.classList.add('visible');
@@ -136,11 +137,11 @@
 
     window.addEventListener('load', () => {
         const a = pillNav.querySelector('.pill-btn.active');
-        if (a) moveIndicator(a);
-        setTimeout(() => {
-            const a2 = pillNav.querySelector('.pill-btn.active');
-            if (a2) moveIndicator(a2);
-        }, 200);
+        if (a) {
+            indicator.style.transition = 'none';
+            moveIndicator(a);
+            requestAnimationFrame(() => { indicator.style.transition = ''; });
+        }
     });
 
     window.addEventListener('resize', () => {
@@ -149,56 +150,100 @@
     });
 })();
 
-/* ─── LIGHTBOX ─── */
+/* ════════════════════════════════════════════
+   MODAL DE PROJETO
+   ════════════════════════════════════════════ */
 
-const lightbox = document.getElementById('lightbox');
+const modalOverlay = document.getElementById('modal-overlay');
 
 function openProject(data) {
-    const img = document.getElementById('lb-img');
-    img.src           = data.img || '';
-    img.style.display = data.img ? 'block' : 'none';
+    const img         = document.getElementById('modal-img');
+    const placeholder = document.getElementById('modal-img-placeholder');
 
-    document.getElementById('lb-name').textContent = data.name;
+    if (data.img) {
+        img.src           = data.img;
+        img.alt           = data.name || '';
+        img.style.display = 'block';
+        placeholder.style.display = 'none';
+    } else {
+        img.style.display = 'none';
+        placeholder.style.display = 'flex';
+    }
 
-    const links = document.getElementById('lb-links');
-    links.innerHTML = '';
+    document.getElementById('modal-title').textContent = data.name        || '';
+    document.getElementById('modal-desc').textContent  = data.description || '';
+
+    const techsEl = document.getElementById('modal-techs');
+    techsEl.innerHTML = '';
+    if (Array.isArray(data.techs)) {
+        const frag = document.createDocumentFragment();
+        data.techs.forEach(t => {
+            const span = document.createElement('span');
+            span.className   = 'modal-tech-tag';
+            span.textContent = t;
+            frag.appendChild(span);
+        });
+        techsEl.appendChild(frag);
+    }
+
+    const actionsEl = document.getElementById('modal-actions');
+    actionsEl.innerHTML = '';
 
     if (data.demo) {
-        links.innerHTML +=
-            `<a class="lk-btn primary" href="${data.demo}" target="_blank">
-                <i class="ti ti-external-link"></i> Demo
+        actionsEl.innerHTML +=
+            `<a class="modal-link-btn modal-link-btn--primary"
+                href="${data.demo}" target="_blank" rel="noopener">
+                <i class="ti ti-external-link"></i> Ver projeto
             </a>`;
     }
 
     if (data.repo) {
-        links.innerHTML +=
-            `<a class="lk-btn" href="${data.repo}" target="_blank">
-                <i class="ti ti-brand-github"></i> Repo
+        actionsEl.innerHTML +=
+            `<a class="modal-link-btn"
+                href="${data.repo}" target="_blank" rel="noopener">
+                <i class="ti ti-brand-github"></i> Ver código
             </a>`;
     }
 
-    lightbox.classList.add('open');
-}
-
-function openCert(data) {
-    const img = document.getElementById('lb-img');
-    img.src           = data.img || '';
-    img.style.display = data.img ? 'block' : 'none';
-
-    document.getElementById('lb-name').textContent = data.name;
-    document.getElementById('lb-links').innerHTML   = '';
-
-    lightbox.classList.add('open');
+    modalOverlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
 }
 
 function closeLightbox(e, force) {
-    if (force || (e && e.target === lightbox)) {
-        lightbox.classList.remove('open');
+    if (force || (e && e.target === modalOverlay)) {
+        modalOverlay.classList.remove('open');
+        document.body.style.overflow = '';
+    }
+}
+
+/* ════════════════════════════════════════════
+   MODAL DE CERTIFICADO
+   ════════════════════════════════════════════ */
+
+const certOverlay = document.getElementById('cert-overlay');
+
+function openCert(data) {
+    const img = document.getElementById('cert-img');
+    img.src = data.img || '';
+    img.alt = data.name || '';
+
+    certOverlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeCertModal(e, force) {
+    if (force || (e && e.target === certOverlay)) {
+        certOverlay.classList.remove('open');
+        document.body.style.overflow = '';
     }
 }
 
 document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') lightbox.classList.remove('open');
+    if (e.key === 'Escape') {
+        modalOverlay.classList.remove('open');
+        certOverlay.classList.remove('open');
+        document.body.style.overflow = '';
+    }
 });
 
 /* ─── FRASE DIGITADA ─── */
@@ -246,69 +291,9 @@ document.addEventListener('keydown', e => {
     loop();
 })();
 
-/* ─── CONTADORES DAS STATS ─── */
-
-(function () {
-    const nums = document.querySelectorAll('.stat-num');
-
-    const animarContador = (el) => {
-        const target = parseInt(el.dataset.target, 10);
-        const duracao = 1200;
-        const intervalo = 30;
-        const passos = duracao / intervalo;
-        const incremento = target / passos;
-        let atual = 0;
-
-        const timer = setInterval(() => {
-            atual += incremento;
-            if (atual >= target) {
-                el.textContent = target + '+';
-                clearInterval(timer);
-            } else {
-                el.textContent = Math.floor(atual);
-            }
-        }, intervalo);
-    };
-
-    const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                animarContador(entry.target);
-                observer.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.5 });
-
-    nums.forEach(n => observer.observe(n));
-})();
-
-/* ─── EFEITO 3D MOEDA NA FOTO ─── */
-
-(function () {
-    const foto    = document.querySelector('.foto-perfil');
-    const wrapper = document.querySelector('.foto-wrapper');
-    if (!foto || !wrapper) return;
-
-    const INTENSIDADE = 18;
-
-    foto.addEventListener('mousemove', e => {
-        const r  = foto.getBoundingClientRect();
-        const cx = r.left + r.width  / 2;
-        const cy = r.top  + r.height / 2;
-        const dx = (e.clientX - cx) / (r.width  / 2);
-        const dy = (e.clientY - cy) / (r.height / 2);
-        const rotX = -dy * INTENSIDADE;
-        const rotY =  dx * INTENSIDADE;
-
-        wrapper.style.transition = 'transform 0.12s ease';
-        wrapper.style.transform  = `perspective(600px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale(1.04)`;
-    });
-
-    foto.addEventListener('mouseleave', () => {
-        wrapper.style.transition = 'transform 0.6s cubic-bezier(.4,0,.2,1)';
-        wrapper.style.transform  = 'perspective(600px) rotateX(0deg) rotateY(0deg) scale(1)';
-    });
-})();
+/* ─── EFEITO HOVER NA FOTO ───
+   O scale agora é feito via CSS (:hover), removido o JS redundante que
+   manipulava style.transform diretamente. */
 
 /* ─── SCROLL REVEAL ─── */
 
@@ -316,13 +301,10 @@ const revealObserver = new IntersectionObserver(entries => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
             entry.target.classList.add('visible');
-        } else {
-            if (!entry.target.closest('.tab-panel')) {
-                entry.target.classList.remove('visible');
-            }
+            revealObserver.unobserve(entry.target);
         }
     });
-}, { threshold: 0.05 });
+}, { rootMargin: '0px 0px -10% 0px' });
 
 document.querySelectorAll('.reveal').forEach(el => {
     if (!el.closest('.tab-panel')) {
@@ -339,8 +321,7 @@ window.addEventListener('load', () => {
     }
 });
 
-/* ─── CARD ENTRY — sem conflito com hover transform ─── */
-/* Após a animação de entrada terminar, troca o transition para o hover funcionar */
+/* ─── CARD ENTRY ─── */
 
 function ativarCardEntry(el) {
     if (el.classList.contains('entrada-feita')) return;
@@ -360,7 +341,7 @@ const cardEntryObserver = new IntersectionObserver(entries => {
             cardEntryObserver.unobserve(entry.target);
         }
     });
-}, { threshold: 0.05 });
+}, { threshold: 0.05, rootMargin: '0px 0px -5% 0px' });
 
 document.querySelectorAll('.card-entry').forEach(el => {
     if (!el.closest('.tab-panel')) {
@@ -376,7 +357,6 @@ window.addEventListener('load', () => {
         });
     }
 });
-
 
 /* ─── CONTATO — UTILITÁRIO SHAKE ─── */
 
@@ -463,6 +443,7 @@ function sacudir(el) {
 (function () {
     const heroEls = document.querySelectorAll('#inicio .hero-anim');
     let heroVisible = false;
+    let played = false;
 
     function showHero() {
         heroEls.forEach(el => {
@@ -472,39 +453,17 @@ function sacudir(el) {
         heroVisible = true;
     }
 
-    function hideHero() {
-        heroEls.forEach(el => {
-            el.classList.add('no-transition');
-            el.classList.remove('visible');
-        });
-        heroVisible = false;
-    }
-
     window.addEventListener('load', () => {
         requestAnimationFrame(() => {
             requestAnimationFrame(() => {
                 showHero();
+                played = true;
             });
         });
     });
 
-    const heroObserver = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting && !heroVisible) {
-                hideHero();
-                requestAnimationFrame(() => {
-                    requestAnimationFrame(() => {
-                        heroEls.forEach(el => el.classList.remove('no-transition'));
-                        showHero();
-                    });
-                });
-            }
-            if (!entry.isIntersecting) {
-                heroVisible = false;
-            }
-        });
-    }, { threshold: 0.2 });
-
-    const heroSection = document.querySelector('#inicio');
-    if (heroSection) heroObserver.observe(heroSection);
+    // A re-execução da animação ao reentrar na seção foi removida:
+    // disparava reflow em cada elemento do hero a cada scroll de
+    // ida/volta na primeira seção. A animação de entrada agora ocorre
+    // apenas uma vez, no carregamento da página.
 })();

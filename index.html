@@ -6,11 +6,9 @@
     <link rel="stylesheet" href="style.css">
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@100..900&display=swap" rel="stylesheet">
-
     <title>Henrique ramos | Portífolio</title>
 </head>
 <body>
@@ -24,24 +22,19 @@
             <li><a href="#inicio" class="menu-link active" data-section="inicio">Início</a></li>
             <li><a href="#sobre" class="menu-link" data-section="sobre">Sobre Mim</a></li>
             <li><a href="#projetos" class="menu-link" data-section="projetos">Portifólio</a></li>
-            <li><a href="#contato" class="menu-link" data-section="contato">Contato</a></li>
+<li><a href="#contato" class="menu-link" data-section="contato">Contato</a></li>
         </ul>
     </nav>
 
     <main id="inicio" class="cabecalho">
         <div class="cabecalho-inner">
-
             <div class="foto-container hero-anim hero-anim--left" style="transition-delay:0.1s">
                 <div class="foto-wrapper">
-                    <div class="foto-glow"></div>
                     <img src="imagens/Início/HenriqueRamos2_cut3.JPG"
                          alt="Foto de Henrique Ramos em trajes formais"
                          class="foto-perfil">
                 </div>
-                <div class="foto-badge">
-                    <span class="dot-hero"></span>
-                    Disponível
-                </div>
+                
             </div>
 
             <div class="cabecalho-texto">
@@ -71,11 +64,7 @@
                         Baixar CV
                     </a>
                 </div>
-
-               
-                </div>
             </div>
-
         </div>
     </main>
 
@@ -144,11 +133,19 @@
         <div class="tab-panel active" id="tab-projetos">
             <div class="cards-grid">
 
-                <div class="card card-entry" onclick="openProject({name:'Web site Kuro Neko Coffee', img:'imagens/Projetos/KuroNeko_01.JPG'})">
+                <div class="card card-entry" onclick="openProject({
+                    name: 'Web site Kuro Neko Coffee',
+                    img: 'imagens/Projetos/KuroNeko_01.JPG',
+                    description: 'Site institucional para a cafeteria Kuro Neko Coffee Co., com foco em apresentar o cardápio, a atmosfera da marca e facilitar o contato com clientes. Design moderno com paleta escura e elementos minimalistas.',
+                    techs: ['HTML', 'CSS', 'JavaScript'],
+                    demo: '#',
+                    repo: '#'
+                })">
                     <div class="card-img-wrapper">
                         <img class="card-img"
                              src="imagens/Projetos/KuroNeko_01.JPG"
-                             alt="Imagem do website da loja Kuro Neko Coffee Co.">
+                             alt="Imagem do website da loja Kuro Neko Coffee Co."
+                             loading="lazy">
                     </div>
                     <div class="card-footer">
                         <span class="card-name">Web site Kuro Neko Coffee</span>
@@ -160,11 +157,19 @@
                     </div>
                 </div>
 
-                <div class="card card-entry" onclick="openProject({name:'Dev Link - Rockseat', img:'imagens/Projetos/DevLINK_01.JPG'})">
+                <div class="card card-entry" onclick="openProject({
+                    name: 'Dev Link - Rockseat',
+                    img: 'imagens/Projetos/DevLINK_01.JPG',
+                    description: 'Projeto desenvolvido durante o curso da Rocketseat. Uma página de links estilo Linktree para desenvolvedores, com design limpo, foto de perfil centralizada e botões para redes sociais e projetos.',
+                    techs: ['HTML', 'CSS', 'JavaScript'],
+                    demo: '#',
+                    repo: '#'
+                })">
                     <div class="card-img-wrapper">
                         <img class="card-img"
-                             src="imagens/Projetos/DevLINK_01.JPG"
-                             alt="Imagem de um web site com botões e uma foto circular centralizada ao topo do site.">
+                             src="imagens/Projetos/DevLINK_02.JPG"
+                             alt="Imagem de um web site com botões e uma foto circular centralizada ao topo do site."
+                             loading="lazy">
                     </div>
                     <div class="card-footer">
                         <span class="card-name">Dev Link - Rockseat</span>
@@ -176,11 +181,19 @@
                     </div>
                 </div>
 
-                <div class="card card-entry" onclick="openProject({name:'Portifólio', img:'imagens/Projetos/Portifolio_01.JPG'})">
+                <div class="card card-entry" onclick="openProject({
+                    name: 'Portifólio',
+                    img: 'imagens/Projetos/Portifolio_01.JPG',
+                    description: 'Portfólio pessoal desenvolvido do zero para apresentar meus projetos, habilidades e formas de contato. Conta com animações de scroll, navegação suave, lightbox de projetos e formulários de contato via WhatsApp e e-mail.',
+                    techs: ['HTML', 'CSS', 'JavaScript'],
+                    demo: '#',
+                    repo: '#'
+                })">
                     <div class="card-img-wrapper">
                         <img class="card-img"
-                             src="imagens/Projetos/Portifolio_01.JPG"
-                             alt="Portifólio">
+                             src="imagens/Projetos/Portifolio_02.JPG"
+                             alt="Portifólio"
+                             loading="lazy">
                     </div>
                     <div class="card-footer">
                         <span class="card-name">Portifólio</span>
@@ -198,47 +211,77 @@
         <!-- CERTIFICADOS -->
         <div class="tab-panel" id="tab-certificados">
             <div class="cards-grid">
-
                 <div class="card card-entry" onclick="openCert({name:'HTML e CSS', img:'imagens/certificados/html-css.jpg'})">
                     <div class="card-img-wrapper">
-                        <img class="card-img" src="imagens/certificados/html-css.jpg" alt="Certificado HTML e CSS">
+                        <img class="card-img" src="imagens/certificados/html-css.jpg" alt="Certificado HTML e CSS" loading="lazy">
                     </div>
                     <div class="card-footer">
                         <span class="card-name">HTML e CSS</span>
                     </div>
                 </div>
-
             </div>
         </div>
 
         <!-- HABILIDADES -->
         <div class="tab-panel" id="tab-habilidades">
             <div class="skills-grid">
-
                 <div class="skill-card card-entry"><i class="ti ti-brand-html5"></i><span>HTML5</span></div>
                 <div class="skill-card card-entry"><i class="ti ti-brand-css3"></i><span>CSS3</span></div>
                 <div class="skill-card card-entry"><i class="ti ti-brand-javascript"></i><span>JavaScript</span></div>
                 <div class="skill-card card-entry"><i class="ti ti-brand-git"></i><span>Git</span></div>
-
             </div>
         </div>
 
     </section>
 
-    <!-- LIGHTBOX -->
-    <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
-        <div class="lightbox-box">
-            <button class="lightbox-close" onclick="closeLightbox(null, true)">&times;</button>
-            <img class="lightbox-img" id="lb-img" alt="">
-            <div class="lightbox-footer">
-                <span class="lb-name" id="lb-name"></span>
-                <div class="lb-links" id="lb-links"></div>
+    <!-- ─── MODAL DE PROJETO ─── -->
+    <div class="modal-overlay" id="modal-overlay" onclick="closeLightbox(event)">
+        <div class="modal-box" id="modal-box" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+
+            <!-- Botão fechar -->
+            <button class="modal-close" id="modal-close" onclick="closeLightbox(null, true)" aria-label="Fechar">
+                <i class="ti ti-x"></i>
+            </button>
+
+            <!-- Lado esquerdo: preview -->
+            <div class="modal-left">
+                <div class="modal-img-wrap">
+                    <img class="modal-img" id="modal-img" alt="" />
+                    <div class="modal-img-placeholder" id="modal-img-placeholder">
+                        <i class="ti ti-photo-off"></i>
+                    </div>
+                </div>
+
+                <!-- Botões de ação dentro do lado esquerdo, abaixo da imagem -->
+                <div class="modal-actions" id="modal-actions"></div>
             </div>
+
+            <!-- Lado direito: informações -->
+            <div class="modal-right">
+                <span class="modal-eyebrow">PROJETO</span>
+                <h3 class="modal-title" id="modal-title"></h3>
+                <p class="modal-desc" id="modal-desc"></p>
+
+                <div class="modal-techs-section">
+                    <p class="modal-techs-label">TECNOLOGIAS UTILIZADAS</p>
+                    <div class="modal-techs" id="modal-techs"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ─── MODAL DE CERTIFICADO ─── -->
+    <div class="cert-overlay" id="cert-overlay" onclick="closeCertModal(event)">
+        <div class="cert-box">
+            <button class="modal-close cert-close" onclick="closeCertModal(null, true)" aria-label="Fechar">
+                <i class="ti ti-x"></i>
+            </button>
+            <img class="cert-img" id="cert-img" alt="" />
         </div>
     </div>
 
     <section id="contato" class="contato">
-
         <p class="contato-label reveal">Contato</p>
         <h2 class="contatos-titulo reveal reveal--delay-1">Vamos conversar</h2>
         <p class="contato-sub reveal reveal--delay-2">Escolha como prefere entrar em contato e escreva sua mensagem abaixo.</p>
@@ -258,18 +301,8 @@
                 </div>
 
                 <div class="contato-campos">
-                    <input
-                        type="text"
-                        id="wpp-nome"
-                        placeholder="Seu nome"
-                        class="campo-form"
-                        autocomplete="off"
-                    />
-                    <textarea
-                        id="wpp-mensagem"
-                        placeholder="Digite sua mensagem..."
-                        class="text-form"
-                    ></textarea>
+                    <input type="text" id="wpp-nome" placeholder="Seu nome" class="campo-form" autocomplete="off" />
+                    <textarea id="wpp-mensagem" placeholder="Digite sua mensagem..." class="text-form"></textarea>
                 </div>
 
                 <button class="contato-btn contato-btn--whatsapp" id="btn-whatsapp">
@@ -279,9 +312,7 @@
             </div>
 
             <!-- DIVISOR -->
-            <div class="contato-divisor">
-                <span>ou</span>
-            </div>
+            <div class="contato-divisor"><span>ou</span></div>
 
             <!-- EMAIL -->
             <div class="contato-card" id="card-email">
@@ -296,25 +327,9 @@
                 </div>
 
                 <div class="contato-campos">
-                    <input
-                        type="text"
-                        id="email-nome"
-                        placeholder="Seu nome"
-                        class="campo-form"
-                        autocomplete="off"
-                    />
-                    <input
-                        type="email"
-                        id="email-remetente"
-                        placeholder="Seu e-mail (opcional)"
-                        class="campo-form"
-                        autocomplete="off"
-                    />
-                    <textarea
-                        id="email-mensagem"
-                        placeholder="Digite sua mensagem..."
-                        class="text-form"
-                    ></textarea>
+                    <input type="text" id="email-nome" placeholder="Seu nome" class="campo-form" autocomplete="off" />
+                    <input type="email" id="email-remetente" placeholder="Seu e-mail (opcional)" class="campo-form" autocomplete="off" />
+                    <textarea id="email-mensagem" placeholder="Digite sua mensagem..." class="text-form"></textarea>
                 </div>
 
                 <button class="contato-btn contato-btn--email" id="btn-email">
