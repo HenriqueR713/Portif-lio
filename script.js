@@ -417,24 +417,21 @@ function sacudir(el) {
             return;
         }
 
-        const assunto = `Contato via portfólio — ${nome}`;
+       const assunto = `Contato via portfólio — ${nome}`;
 
-        let corpo = `Olá, me chamo ${nome}.\n\n${mensagem}`;
-        if (remetente) {
-            corpo += `\n\n— ${remetente}`;
-        }
+let corpo = `Olá, me chamo ${nome}.\n\n${mensagem}`;
 
-        const headers = remetente
-            ? `&reply-to=${encodeURIComponent(remetente)}`
-            : '';
+if (remetente) {
+    corpo += `\n\n— ${remetente}`;
+}
 
-        const mailtoUrl =
-            `mailto:${MEU_EMAIL}` +
-            `?subject=${encodeURIComponent(assunto)}` +
-            `&body=${encodeURIComponent(corpo)}` +
-            headers;
+const gmail =
+    `https://mail.google.com/mail/?view=cm&fs=1` +
+    `&to=${MEU_EMAIL}` +
+    `&su=${encodeURIComponent(assunto)}` +
+    `&body=${encodeURIComponent(corpo)}`;
 
-        window.location.href = mailtoUrl;
+window.open(gmail, '_blank');
     });
 })();
 
