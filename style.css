@@ -21,10 +21,6 @@ html {
     --navegacao: rgba(15, 23, 42, 0.35);
 }
 
-/* ─── GRID DE FUNDO ───
-   Trocado de background-image (pixel grid no body::before, recalculado em
-   todo scroll) para um SVG fixo e leve, sem custo de repaint. */
-
 body::before {
     content: '';
     position: fixed;
@@ -35,7 +31,6 @@ body::before {
         linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
     background-size: 48px 48px;
     pointer-events: none;
-    /* mantém o efeito visual mas fora da camada de composição de scroll */
     transform: translateZ(0);
     contain: strict;
 }
@@ -43,13 +38,10 @@ body::before {
 body {
     background-color: black;
     color: var(--claro);
+    overflow-x: hidden;
 }
 
-/* ─── NAVBAR ───
-   backdrop-filter mantido, porém com raio reduzido (8px em vez de 18px) e
-   isolado em camada de composição própria (translateZ + will-change),
-   para evitar que o blur force recomposição de todo o conteúdo abaixo a
-   cada frame de scroll. contain limita o escopo de recálculo da navbar. */
+/* ─── NAVBAR ─── */
 
 .navegacao {
     position: fixed;
@@ -124,7 +116,9 @@ body {
     font-family: 'Poppins', sans-serif;
 }
 
-/* ─── CABEÇALHO ─── */
+/* ─── CABEÇALHO ───
+   Layout sempre em row (foto ao lado do texto). Em telas menores,
+   o conjunto encolhe proporcionalmente em vez de empilhar. */
 
 .cabecalho {
     min-height: 100vh;
@@ -136,13 +130,12 @@ body {
 
 .cabecalho-inner {
     display: flex;
+    flex-direction: row;
     align-items: center;
     gap: 4rem;
     max-width: 900px;
     width: 100%;
 }
-
-/* ─── FOTO WRAPPER ─── */
 
 .foto-wrapper {
     position: relative;
@@ -194,6 +187,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 0.55rem;
+    min-width: 0;
 }
 
 .hero-label {
@@ -235,10 +229,6 @@ h1 span {
     gap: 0.4rem;
     position: relative;
 }
-
-
-
-.aspas--fecha { align-self: flex-end; }
 
 .hero-frase-texto {
     font-size: 0.85rem;
@@ -332,7 +322,8 @@ h1 span {
     to   { opacity: 1; transform: translateX(0); }
 }
 
-/* ─── SOBRE MIM ─── */
+/* ─── SOBRE MIM ───
+   Layout sempre em row (coluna esquerda + coluna direita lado a lado). */
 
 .sobre {
     padding: 6rem 2rem;
@@ -358,8 +349,8 @@ h1 span {
 }
 
 .sobre-grid {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
+    display: flex;
+    flex-direction: row;
     gap: 2rem;
     max-width: 800px;
     width: 100%;
@@ -370,6 +361,9 @@ h1 span {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
+    flex: 0 0 auto;
+    width: 33%;
+    min-width: 0;
 }
 
 .status-badge {
@@ -443,6 +437,8 @@ h1 span {
     display: flex;
     flex-direction: column;
     gap: 1.2rem;
+    flex: 1 1 auto;
+    min-width: 0;
 }
 
 .sobre-card {
@@ -475,10 +471,6 @@ h1 span {
 }
 
 .sobre-card:hover::before { width: 4px; }
-
-/* Shimmer no hover do card "sobre" removido: era um gradiente animado em
-   loop continuo (background-position) sobre um elemento absolute cobrindo
-   o card inteiro — caro em repaint e raramente notado pelo usuário. */
 
 .sobre-paragrafo {
     font-size: 0.9rem;
@@ -589,21 +581,17 @@ h1 span {
 /* ─── CARDS GRID ─── */
 
 .cards-grid {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     gap: 1.25rem;
-    justify-content: center;
     width: 100%;
+    max-width: 880px;
 }
 
-/* ─── CARD ───
-   Hover agora anima apenas transform (composto na GPU), e o box-shadow é
-   pré-pintado num pseudo-elemento com opacity, evitando recalcular sombra
-   em cada frame de transição. border-color trocado por outline para não
-   disparar repaint de layout. */
+/* ─── CARD ─── */
 
 .card {
-    width: 280px;
+    width: 100%;
     background: rgba(255, 255, 255, 0.04);
     border: 1px solid rgba(255, 255, 255, 0.09);
     border-radius: 16px;
@@ -655,17 +643,42 @@ h1 span {
     display: block;
 }
 
-
+/* ─── CARD FOOTER ───
+   Estrutura em 2 linhas:
+   1) nome do projeto
+   2) habilidades (tags) à esquerda + data à direita, na mesma linha */
 
 .card-footer {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0.8rem 1rem;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.40rem 1rem;
 }
 
-.card-name { font-size: 0.88rem; font-weight: 600; color: var(--claro); }
-.card-tags { display: flex; gap: 0.35rem; }
+.card-name {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--claro);
+    line-height: 1.3;
+
+    /* Trunca nomes longos com reticências em vez de quebrar em duas linhas */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.card-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+}
 
 .tag {
     font-size: 0.62rem;
@@ -676,8 +689,29 @@ h1 span {
     color: #f88181;
 }
 
-/* ─── SKILL CARD ───
-   Mesma estratégia do .card: outline/box-shadow em pseudo-elemento. */
+.card-date {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.62rem;
+    font-weight: 500;
+    color: #694747;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: color 0.2s;
+}
+
+.card:hover .card-date {
+    color: #f88181;
+}
+
+.card-date i {
+    font-size: 0.68rem;
+    color: var(--secundaria);
+    opacity: 0.7;
+}
+
+/* ─── SKILL CARD ─── */
 
 .skills-grid {
     display: flex;
@@ -753,12 +787,7 @@ h1 span {
     color: #fec7c7;
 }
 
-/* ════════════════════════════════════════════
-   MODAL DE PROJETO
-   ════════════════════════════════════════════
-   backdrop-filter no overlay também é caro (cobre a tela toda). Trocado
-   por um fundo escuro mais opaco sem blur, mantendo a sensação de
-   profundidade. */
+/* ─── MODAL DE PROJETO ─── */
 
 .modal-overlay {
     position: fixed;
@@ -805,7 +834,6 @@ h1 span {
     transform: scale(1) translateY(0);
 }
 
-/* ─── Botão fechar ─── */
 .modal-close {
     position: absolute;
     top: 14px;
@@ -836,7 +864,6 @@ h1 span {
     transform: rotate(90deg);
 }
 
-/* ─── Lado esquerdo: imagem + botões ─── */
 .modal-left {
     display: flex;
     flex-direction: column;
@@ -919,9 +946,11 @@ h1 span {
     border-color: transparent;
     color: #fff;
     box-shadow: 0 3px 12px rgba(202, 40, 81, 0.3);
+    transition: opacity 0.18s, transform 0.15s, box-shadow 0.15s;
 }
 
 .modal-link-btn--primary:hover {
+    background: linear-gradient(135deg, var(--secundaria), var(--primaria));
     opacity: 0.92;
     box-shadow: 0 6px 20px rgba(202, 40, 81, 0.45);
     transform: translateY(-2px);
@@ -933,7 +962,6 @@ h1 span {
     pointer-events: none;
 }
 
-/* ─── Lado direito: informações ─── */
 .modal-right {
     padding: 2.2rem 2rem 2rem;
     display: flex;
@@ -1006,35 +1034,7 @@ h1 span {
     transform: translateY(-2px);
 }
 
-@media (max-width: 640px) {
-    .modal-box {
-        grid-template-columns: 1fr;
-        max-height: 88vh;
-        overflow-y: auto;
-    }
-
-    .modal-left {
-        border-right: none;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-    }
-
-    .modal-img {
-        max-height: 200px;
-    }
-
-    .modal-right {
-        padding: 1.5rem 1.4rem 1.8rem;
-        justify-content: flex-start;
-    }
-
-    .modal-title {
-        font-size: 1.2rem;
-    }
-}
-
-/* ════════════════════════════════════════════
-   MODAL DE CERTIFICADO
-   ════════════════════════════════════════════ */
+/* ─── MODAL DE CERTIFICADO ─── */
 
 .cert-overlay {
     position: fixed;
@@ -1056,8 +1056,9 @@ h1 span {
 
 .cert-box {
     position: relative;
+    display: inline-flex;
     max-width: 860px;
-    width: 100%;
+    max-height: 80vh;
     border-radius: 16px;
     overflow: hidden;
     box-shadow: 0 40px 100px rgba(0, 0, 0, 0.7);
@@ -1075,8 +1076,12 @@ h1 span {
 }
 
 .cert-img {
-    width: 100%;
     display: block;
+    max-width: 860px;
+    max-height: 80vh;
+    width: auto;
+    height: auto;
+    object-fit: contain;
     border-radius: 16px;
 }
 
@@ -1084,9 +1089,19 @@ h1 span {
     position: absolute;
     top: 12px;
     right: 12px;
+    background: rgba(10, 10, 10, 0.75);
+    border-color: rgba(255, 255, 255, 0.18);
+    color: #fff;
 }
 
-/* ─── CONTATO ─── */
+.cert-close:hover {
+    background: rgba(239, 68, 68, 0.85);
+    border-color: rgba(239, 68, 68, 0.9);
+    color: #fff;
+}
+
+/* ─── CONTATO ───
+   Os dois cartões (WhatsApp / E-mail) e o divisor sempre lado a lado. */
 
 .contato {
     padding: 6rem 2rem;
@@ -1120,6 +1135,7 @@ h1 span {
 
 .contato-grid {
     display: flex;
+    flex-direction: row;
     align-items: stretch;
     gap: 0;
     max-width: 820px;
@@ -1128,6 +1144,7 @@ h1 span {
 
 .contato-card {
     flex: 1;
+    min-width: 0;
     background: rgba(255, 255, 255, 0.04);
     border: 1px solid rgba(255, 255, 255, 0.09);
     border-radius: 20px;
@@ -1203,6 +1220,7 @@ h1 span {
     font-family: inherit;
     outline: none;
     transition: border-color 0.2s, background 0.2s;
+    min-width: 0;
 }
 
 .contato-campos .campo-form {
@@ -1289,54 +1307,7 @@ h1 span {
     letter-spacing: 0.1em;
 }
 
-@media (max-width: 700px) {
-    .contato-grid {
-        flex-direction: column;
-        gap: 1.25rem;
-    }
-
-    .contato-divisor {
-        flex-direction: row;
-        padding: 0;
-        align-self: auto;
-    }
-
-    .contato-divisor::before,
-    .contato-divisor::after {
-        flex: 1;
-        height: 1px;
-        width: auto;
-    }
-}
-
-/* ─── RESPONSIVO GERAL ─── */
-
-@media (max-width: 700px) {
-    .cabecalho-inner {
-        flex-direction: column;
-        text-align: center;
-        gap: 2.5rem;
-    }
-
-    .foto-wrapper { width: 220px; height: 220px; }
-    .foto-perfil  { width: 190px; height: 190px; }
-
-    h1 { font-size: 2.4rem; }
-
-    .hero-btns { justify-content: center; }
-    .hero-frase-bloco { text-align: left; }
-}
-
-@media (max-width: 640px) {
-    .sobre-grid { grid-template-columns: 1fr; }
-    .sobre-esquerda { align-items: center; }
-    .info-pills { width: 100%; align-items: center; }
-    .card { width: 100%; max-width: 340px; }
-}
-
-/* ─── SCROLL REVEAL ───
-   Animações trocadas para usar apenas opacity + transform (translate),
-   evitando recalcular layout durante o scroll. */
+/* ─── SCROLL REVEAL ─── */
 
 .reveal {
     opacity: 0;
@@ -1418,4 +1389,692 @@ h1 span {
 .campo-erro {
     border-color: #ef4444 !important;
     animation: shake 0.4s ease;
+}
+
+
+/* ════════════════════════════════════════════════════════════
+   RESPONSIVIDADE
+   Filosofia: NADA empilha. Hero (foto + texto), Sobre (esquerda +
+   direita) e Contato (whatsapp + divisor + email) continuam sempre
+   em row, em qualquer largura de tela — só encolhem proporcionalmente
+   (fontes, paddings, gaps, tamanhos de imagem) usando clamp() e os
+   breakpoints abaixo. Os cards do Portfólio também já ficavam lado a
+   lado e continuam assim.
+   ════════════════════════════════════════════════════════════ */
+
+/* ─── TELAS GRANDES (≥1440px) ─── */
+
+@media (min-width: 1440px) {
+    .cabecalho-inner,
+    .contato-grid {
+        max-width: 1000px;
+    }
+
+    .sobre-grid {
+        max-width: 900px;
+    }
+
+    .cards-grid {
+        max-width: 960px;
+    }
+}
+
+/* ─── TABLET (≤900px) ───
+   Reduz um pouco os tamanhos, mas tudo continua em row. */
+
+@media (max-width: 900px) {
+    .navegacao {
+        padding: 0.7rem 1.25rem;
+    }
+
+    .menu {
+        gap: 1.25rem;
+    }
+
+    .menu-link {
+        font-size: 0.72rem;
+    }
+
+    .cabecalho {
+        padding: 6.5rem 1.5rem 2.5rem;
+        min-height: auto;
+    }
+
+    .cabecalho-inner {
+        gap: 1.75rem;
+    }
+
+    .foto-container {
+        width: 200px;
+        height: 200px;
+    }
+
+    .foto-perfil {
+        width: 184px;
+        height: 184px;
+    }
+
+    h1 {
+        font-size: 1.9rem;
+    }
+
+    .hero-btns {
+        flex-wrap: wrap;
+    }
+
+    .sobre {
+        padding: 4.5rem 1.5rem;
+    }
+
+    .sobre-titulo {
+        font-size: 1.9rem;
+    }
+
+    .sobre-grid {
+        max-width: 640px;
+        gap: 1.25rem;
+    }
+
+    .sobre-esquerda {
+        width: 38%;
+    }
+
+    .projetos {
+        padding: 4.5rem 1.5rem;
+    }
+
+    .projetos-titulo {
+        font-size: 1.8rem;
+    }
+
+    .cards-grid {
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        max-width: 640px;
+    }
+
+    .modal-box {
+        max-width: 600px;
+    }
+
+    .modal-img-wrap {
+        min-height: 180px;
+    }
+
+    .contato {
+        padding: 4.5rem 1.5rem;
+    }
+
+    .contato-grid {
+        max-width: 560px;
+    }
+}
+
+/* ─── CELULAR (≤600px) ───
+   Hero, Sobre e Contato continuam em row: a foto, as colunas do
+   "Sobre" e os dois cartões de contato ficam lado a lado, só que
+   bem menores. Os cards de projeto/certificado seguem em 2 colunas
+   fixas, como já estava. */
+
+@media (max-width: 600px) {
+    .navegacao {
+        padding: 0.55rem 0.85rem;
+        border-bottom-left-radius: 14px;
+        border-bottom-right-radius: 14px;
+    }
+
+    .logo span {
+        font-size: 0.82rem;
+    }
+
+    .menu {
+        gap: 0.4rem;
+    }
+
+    .menu-link {
+        font-size: 0.56rem;
+        letter-spacing: 0;
+        padding: 0.3rem 0;
+    }
+
+    .blob {
+        height: 24px;
+    }
+
+    /* ── HERO: foto + texto lado a lado, em miniatura ── */
+
+    .cabecalho {
+        padding: 5.5rem 0.9rem 1.75rem;
+        align-items: flex-start;
+    }
+
+    .cabecalho-inner {
+        flex-direction: row;
+        align-items: center;
+        gap: 0.9rem;
+        max-width: 100%;
+    }
+
+    .foto-container {
+        width: clamp(72px, 22vw, 92px);
+        height: clamp(72px, 22vw, 92px);
+        flex-shrink: 0;
+    }
+
+    .foto-perfil {
+        width: 100%;
+        height: 100%;
+        border-width: 2px;
+        margin-right: 0;
+    }
+
+    .cabecalho-texto {
+        gap: 0.32rem;
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+
+    .hero-label {
+        font-size: 0.58rem;
+        letter-spacing: 0.12em;
+    }
+
+    h1 {
+        font-size: clamp(1.05rem, 6vw, 1.35rem);
+        line-height: 1.15;
+    }
+
+    .cabecalho-sub-titulo {
+        font-size: 0.68rem;
+    }
+
+    .hero-frase-bloco {
+        margin: 0.35rem 0 0.1rem;
+        padding: 0.45rem 0.55rem;
+        border-radius: 0 8px 8px 0;
+    }
+
+    .hero-frase-texto {
+        font-size: 0.6rem;
+        line-height: 1.45;
+    }
+
+    .cabecalho-frase {
+        font-size: 0.6rem;
+        min-height: 1rem;
+    }
+
+    .hero-btns {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0.35rem;
+        margin-top: 0.4rem;
+    }
+
+    .btn-hero {
+        padding: 0.32rem 0.55rem;
+        font-size: 0.58rem;
+        border-radius: 7px;
+        gap: 4px;
+    }
+
+    .btn-hero i { font-size: 0.7rem; }
+
+    /* ── SOBRE MIM: coluna esquerda + direita lado a lado, em miniatura ── */
+
+    .sobre {
+        padding: 3rem 0.9rem;
+    }
+
+    .sobre-label {
+        font-size: 0.62rem;
+    }
+
+    .sobre-titulo {
+        font-size: 1.25rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .sobre-grid {
+        flex-direction: row;
+        gap: 0.7rem;
+        max-width: 100%;
+        align-items: stretch;
+    }
+
+    .sobre-esquerda {
+        width: 30%;
+        gap: 0.45rem;
+    }
+
+    .status-badge {
+        font-size: 0.52rem;
+        padding: 0.28rem 0.5rem;
+        gap: 4px;
+        white-space: normal;
+        text-align: center;
+        line-height: 1.2;
+    }
+
+    .dot-status {
+        width: 5px;
+        height: 5px;
+    }
+
+    .info-pills {
+        gap: 0.35rem;
+    }
+
+    .pill {
+        padding: 0.35rem 0.45rem;
+        font-size: 0.56rem;
+        gap: 5px;
+        border-radius: 8px;
+    }
+
+    .pill-icon {
+        font-size: 11px;
+    }
+
+    .sobre-direita {
+        width: 70%;
+        gap: 0.65rem;
+    }
+
+    .sobre-card {
+        padding: 0.75rem 0.8rem;
+        border-radius: 10px;
+    }
+
+    .sobre-paragrafo {
+        font-size: 0.62rem;
+        line-height: 1.55;
+    }
+
+    .skills-label {
+        font-size: 0.5rem;
+        margin-bottom: 0.3rem;
+    }
+
+    .skills-row {
+        gap: 0.3rem;
+    }
+
+    .skill-tag {
+        font-size: 0.54rem;
+        padding: 0.16rem 0.5rem;
+    }
+
+    /* ── PORTFÓLIO ── */
+
+    .projetos {
+        padding: 3.5rem 1.25rem;
+    }
+
+    .projetos-titulo {
+        font-size: 1.55rem;
+    }
+
+    .pill-nav-inner {
+        width: 100%;
+        max-width: 360px;
+    }
+
+    .pill-btn {
+        flex: 1;
+        padding: 0.45rem 0.5rem;
+        font-size: 0.72rem;
+        text-align: center;
+    }
+
+    .cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+        max-width: 100%;
+    }
+
+    .card-img {
+        height: 110px;
+    }
+
+    .card-footer {
+        padding: 0.5rem 0.65rem;
+        gap: 0.4rem;
+    }
+
+    .card-name {
+        font-size: 0.74rem;
+    }
+
+    .card-meta {
+        flex-wrap: wrap;
+        gap: 0.3rem;
+    }
+
+    .card-tags {
+        gap: 0.2rem;
+    }
+
+    .tag {
+        font-size: 0.56rem;
+        padding: 0.12rem 0.4rem;
+    }
+
+    .card-date {
+        font-size: 0.56rem;
+    }
+
+    .skills-grid {
+        gap: 0.7rem;
+    }
+
+    .skill-card {
+        width: 95px;
+        height: 95px;
+    }
+
+    .skill-card i {
+        font-size: 2.1rem;
+    }
+
+    .skill-card span {
+        font-size: 0.68rem;
+    }
+
+    /* ── MODAL DE PROJETO: mantém imagem e texto lado a lado ── */
+
+    .modal-overlay {
+        padding: 0.5rem;
+    }
+
+    .modal-box {
+        grid-template-columns: 0.85fr 1.15fr;
+        max-height: 78vh;
+        overflow-y: hidden;
+        max-width: 100%;
+    }
+
+    .modal-left {
+        border-right: 1px solid rgba(255, 255, 255, 0.06);
+        border-bottom: none;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .modal-img-wrap {
+        min-height: 0;
+        flex: 1 1 auto;
+    }
+
+    .modal-img {
+        max-height: none;
+        height: 100%;
+    }
+
+    .modal-actions {
+        flex-direction: column;
+        padding: 0.5rem;
+        gap: 0.35rem;
+        flex-shrink: 0;
+    }
+
+    .modal-link-btn {
+        justify-content: center;
+        font-size: 0.66rem;
+        padding: 0.4rem 0.6rem;
+    }
+
+    .modal-right {
+        padding: 0.9rem 0.8rem;
+        gap: 0.45rem;
+        overflow-y: auto;
+        max-height: 78vh;
+    }
+
+    .modal-eyebrow {
+        font-size: 0.56rem;
+    }
+
+    .modal-title {
+        font-size: 0.95rem;
+    }
+
+    .modal-desc {
+        font-size: 0.66rem;
+        line-height: 1.42;
+    }
+
+    .modal-techs-label {
+        font-size: 0.52rem;
+    }
+
+    .modal-tech-tag {
+        font-size: 0.6rem;
+        padding: 0.18rem 0.55rem;
+    }
+
+    .cert-box,
+    .cert-img {
+        max-width: 92vw;
+        max-height: 65vh;
+    }
+
+    /* ── CONTATO: dois cartões + divisor lado a lado, compactos ── */
+
+    .contato {
+        padding: 3rem 0.9rem;
+    }
+
+    .contato-label {
+        font-size: 0.62rem;
+    }
+
+    .contatos-titulo {
+        font-size: 1.25rem;
+        margin-bottom: 0.4rem;
+    }
+
+    .contato-sub {
+        font-size: 0.62rem;
+        margin-bottom: 1.5rem;
+        padding: 0 0.3rem;
+    }
+
+    .contato-grid {
+        flex-direction: row;
+        gap: 0;
+        max-width: 100%;
+        align-items: stretch;
+    }
+
+    .contato-card {
+        padding: 0.6rem;
+        gap: 0.5rem;
+        border-radius: 12px;
+    }
+
+    .contato-card-header {
+        gap: 0.4rem;
+    }
+
+    .contato-icone {
+        width: 26px;
+        height: 26px;
+        border-radius: 7px;
+        font-size: 0.78rem;
+    }
+
+    .contato-card-titulo {
+        font-size: 0.62rem;
+    }
+
+    .contato-card-desc {
+        font-size: 0.5rem;
+        margin-top: 0;
+    }
+
+    .contato-campos {
+        gap: 0.35rem;
+    }
+
+    .contato-campos .campo-form {
+        padding: 0.35rem 0.5rem;
+        font-size: 0.6rem;
+        border-radius: 7px;
+    }
+
+    .contato-campos .text-form {
+        padding: 0.35rem 0.5rem;
+        font-size: 0.6rem;
+        min-height: 56px;
+        border-radius: 7px;
+    }
+
+    .contato-btn {
+        padding: 0.45rem 0.5rem;
+        font-size: 0.6rem;
+        gap: 4px;
+        border-radius: 7px;
+    }
+
+    .contato-btn i { font-size: 0.72rem; }
+
+    .contato-divisor {
+        padding: 0 0.4rem;
+        gap: 0.3rem;
+        flex-shrink: 0;
+    }
+
+    .contato-divisor span {
+        font-size: 0.5rem;
+    }
+}
+
+/* ─── CELULARES BEM PEQUENOS (≤420px) ───
+   Continua tudo em row; só reduz mais um nível as fontes/medidas. */
+
+@media (max-width: 420px) {
+    .menu {
+        gap: 0.28rem;
+    }
+
+    .menu-link {
+        font-size: 0.5rem;
+    }
+
+    .logo span {
+        font-size: 0.72rem;
+    }
+
+    .foto-container {
+        width: 64px;
+        height: 64px;
+    }
+
+    h1 {
+        font-size: clamp(0.92rem, 5.6vw, 1.1rem);
+    }
+
+    .hero-label {
+        font-size: 0.52rem;
+    }
+
+    .cabecalho-sub-titulo {
+        font-size: 0.6rem;
+    }
+
+    .hero-frase-texto {
+        font-size: 0.54rem;
+    }
+
+    .btn-hero {
+        font-size: 0.52rem;
+        padding: 0.28rem 0.45rem;
+    }
+
+    .sobre-esquerda {
+        width: 32%;
+    }
+
+    .sobre-direita {
+        width: 68%;
+    }
+
+    .status-badge {
+        font-size: 0.48rem;
+        padding: 0.24rem 0.4rem;
+    }
+
+    .pill {
+        font-size: 0.5rem;
+        padding: 0.3rem 0.4rem;
+    }
+
+    .sobre-paragrafo {
+        font-size: 0.56rem;
+    }
+
+    .skill-tag {
+        font-size: 0.48rem;
+        padding: 0.14rem 0.4rem;
+    }
+
+    .card-img {
+        height: 95px;
+    }
+
+    .card-name {
+        font-size: 0.7rem;
+    }
+
+    .tag {
+        font-size: 0.54rem;
+        padding: 0.1rem 0.36rem;
+    }
+
+    .skill-card {
+        width: 80px;
+        height: 80px;
+    }
+
+    .skill-card i {
+        font-size: 1.8rem;
+    }
+
+    .skill-card span {
+        font-size: 0.6rem;
+    }
+
+    .pill-btn {
+        font-size: 0.64rem;
+        padding: 0.4rem 0.35rem;
+    }
+
+    .contato-icone {
+        width: 22px;
+        height: 22px;
+        font-size: 0.68rem;
+    }
+
+    .contato-card-titulo {
+        font-size: 0.56rem;
+    }
+
+    .contato-card-desc {
+        font-size: 0.46rem;
+    }
+
+    .contato-campos .campo-form,
+    .contato-campos .text-form {
+        font-size: 0.55rem;
+        padding: 0.3rem 0.4rem;
+    }
+
+    .contato-btn {
+        font-size: 0.55rem;
+        padding: 0.4rem 0.4rem;
+    }
+
+    .contato-divisor {
+        padding: 0 0.28rem;
+    }
 }
